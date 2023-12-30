@@ -8,7 +8,7 @@ public class LoggedInUser {
     private String userId;
     private String displayName;
     private String displayAddress;
-
+private String displayPhone;
     public LoggedInUser(String userId, String displayName) {
         this.userId = userId;
         this.displayName = displayName;
