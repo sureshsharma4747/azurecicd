@@ -9,7 +9,7 @@ public class LoggedInUser {
     private String displayName;
     private String displayAddress;
     private String displayPhone;
-    private String displayPhone2;
+    
     public LoggedInUser(String userId, String displayName) {
         this.userId = userId;
         this.displayName = displayName;
