@@ -11,7 +11,7 @@ trigger:
 
 pool:
 
-vmImage: ‘macos-latest’
+vmImage: 'macos-latest'
 
 variables:
 
@@ -23,29 +23,29 @@ steps:
 
 inputs:
 
-workingDirectory: ‘’
+workingDirectory: ''
 
-gradleWrapperFile: ‘gradlew’
+gradleWrapperFile: 'gradlew'
 
-gradleOptions: ‘-Xmx3072m’
+gradleOptions: '-Xmx3072m'
 
 publishJUnitResults: false
 
-tasks: ‘assemble<variantname>’
+tasks: 'assemble<variantname>'
 
 - task: AndroidSigning@3
 
 inputs:
 
-apkFiles: ‘**/*.apk’
+apkFiles: '**/*.apk'
 
-apksignerKeystoreFile: ‘<key store file>’
+apksignerKeystoreFile: '<key store file>'
 
-apksignerKeystorePassword: ‘$(<key store password variable name>)’
+apksignerKeystorePassword: '$(<key store password variable name>)'
 
-apksignerKeystoreAlias: ‘$(<key store alias name>)’
+apksignerKeystoreAlias: '$(<key store alias name>)'
 
-apksignerKeyPassword: ‘$(<key password>)’
+apksignerKeyPassword: '$(<key password>)'
 
 zipalign: false
 
@@ -53,8 +53,8 @@ zipalign: false
 
 inputs:
 
-PathtoPublish: ‘app/build/outputs/<path to apk>’
+PathtoPublish: 'app/build/outputs/<path to apk>'
 
-ArtifactName: ‘<project name>’
+ArtifactName: '<project name>'
 
-publishLocation: ‘Container’
+publishLocation: 'Container'
