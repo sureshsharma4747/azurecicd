@@ -3,26 +3,58 @@
 # Add steps that test, sign, and distribute the APK, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/android
 
-trigger:
+trigger: 
+
 - master
 
+- develop
+
 pool:
-  vmImage: 'macos-latest'
+
+vmImage: ‘macos-latest’
+
+variables:
+
+- group: <variables group name for key-alias, keystore password, key-password>
 
 steps:
+
 - task: Gradle@2
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
-    publishJUnitResults: false
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'assembleRelease'
+
+inputs:
+
+workingDirectory: ‘’
+
+gradleWrapperFile: ‘gradlew’
+
+gradleOptions: ‘-Xmx3072m’
+
+publishJUnitResults: false
+
+tasks: ‘assemble<variantname>’
+
 - task: AndroidSigning@3
-  inputs:
-    apkFiles: '**/*.apk'
+
+inputs:
+
+apkFiles: ‘**/*.apk’
+
+apksignerKeystoreFile: ‘<key store file>’
+
+apksignerKeystorePassword: ‘$(<key store password variable name>)’
+
+apksignerKeystoreAlias: ‘$(<key store alias name>)’
+
+apksignerKeyPassword: ‘$(<key password>)’
+
+zipalign: false
+
 - task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+
+inputs:
+
+PathtoPublish: ‘app/build/outputs/<path to apk>’
+
+ArtifactName: ‘<project name>’
+
+publishLocation: ‘Container’
