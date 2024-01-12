@@ -10,8 +10,7 @@ trigger:
 - develop
 
 pool:
-
-vmImage: 'macos-latest'
+  vmImage: 'macos-latest'
 
 variables:
 
