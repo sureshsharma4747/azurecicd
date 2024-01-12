@@ -14,7 +14,7 @@ pool:
 
 variables:
 
-- group: <variables group name for key-alias, keystore password, key-password>
+- group: 'android_build_variables'
 
 steps:
 - task: Gradle@2
