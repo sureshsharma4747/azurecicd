@@ -28,14 +28,22 @@ steps:
 - task: AndroidSigning@3
   inputs:
     apkFiles: '**/*.apk'
-    apksignerKeystoreFile: '<key store file>'
-    apksignerKeystorePassword: '$(<key store password variable name>)'
-    apksignerKeystoreAlias: '$(<key store alias name>)'
-    apksignerKeyPassword: '$(<key password>)'
-    zipalign: false
+    apksign: true
+    apksignerKeystoreFile: 'upload-keystore'
+    apksignerKeystorePassword: '123456'
+    apksignerKeystoreAlias: 'upload'
+    apksignerKeyPassword: '123456'
+    zipalign: true
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: $(Build.SourcesDirectory)
+    contents: '**/*.release.apk'
+    targetFolder: '$(build.artifactStagingDirectory)'
+    overWrite: true
+    
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'app/build/outputs/<path to apk>'
-    ArtifactName: '<project name>'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/app/build/outputs/apk/release/'
+    ArtifactName: 'azurecicd-release'
     publishLocation: 'Container'
