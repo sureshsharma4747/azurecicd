@@ -27,13 +27,13 @@ steps:
 
   - task: DownloadSecureFile@1
     inputs:
-      secureFile: key-store.jks
+      secureFile: upload-keystore.jks
 
   - task: AndroidSigning@3
     inputs:
       apkFiles: '**/*.apk'
       apksign: true
-      apksignerKeystoreFile: 'key-store.jks'
+      apksignerKeystoreFile: 'upload-keystore.jks'
       apksignerKeystorePassword: '$(KEYSTORE_PASSWORD)'
       apksignerKeystoreAlias: '$(KEYSTORE_ALIAS)'
       apksignerKeyPassword: '$(KEY_PASSWORD)'
@@ -47,9 +47,7 @@ steps:
       targetFolder: '$(build.artifactStagingDirectory)'
 
   - task: PublishBuildArtifacts@1
-    
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/app/build/outputs/apk/release/'
-    ArtifactName: 'azurecicd-release'
-    publishLocation: 'Container'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/app/build/outputs/apk/release/'
+      ArtifactName: 'azurecicd-release'
+      publishLocation: 'Container'
