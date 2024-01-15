@@ -29,10 +29,10 @@ steps:
   inputs:
     apkFiles: '**/*.apk'
     apksign: true
-    apksignerKeystoreFile: 'upload-keystore'
-    apksignerKeystorePassword: '123456'
-    apksignerKeystoreAlias: 'upload'
-    apksignerKeyPassword: '123456'
+    apksignerKeystoreFile: '$(keystoreFile)'
+    apksignerKeystorePassword: '$(keystorePassword)'
+    apksignerKeystoreAlias: '$(keystoreAlias)'
+    apksignerKeyPassword: '$(keystorePassword)'
     zipalign: true
 
 - task: CopyFiles@2
