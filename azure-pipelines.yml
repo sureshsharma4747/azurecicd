@@ -3,44 +3,50 @@
 # Add steps that test, sign, and distribute the APK, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/android
 
-trigger: 
-
-- master
-
-- develop
+trigger:
+  - master
 
 pool:
-  vmImage: 'macos-latest'
+  vmImage: 'Ubuntu-16.04'
 
 variables:
-
-- group: 'android_build_variables'
+  - group: 'Android Signing keys'
 
 steps:
-- task: Gradle@2
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
-    publishJUnitResults: false
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'assembleRelease'
-- task: AndroidSigning@3
-  inputs:
-    apkFiles: '**/*.apk'
-    apksign: true
-    apksignerKeystoreFile: '$(keystoreFile)'
-    apksignerKeystorePassword: '$(keystorePassword)'
-    apksignerKeystoreAlias: '$(keystoreAlias)'
-    apksignerKeyPassword: '$(keystorePassword)'
-    zipalign: true
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.11'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'assembleRelease'
 
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: $(Build.SourcesDirectory)
-    contents: '**/*.release.apk'
-    targetFolder: '$(build.artifactStagingDirectory)'
-    overWrite: true
+  - task: DownloadSecureFile@1
+    inputs:
+      secureFile: key-store.jks
+
+  - task: AndroidSigning@3
+    inputs:
+      apkFiles: '**/*.apk'
+      apksign: true
+      apksignerKeystoreFile: 'key-store.jks'
+      apksignerKeystorePassword: '$(KEYSTORE_PASSWORD)'
+      apksignerKeystoreAlias: '$(KEYSTORE_ALIAS)'
+      apksignerKeyPassword: '$(KEY_PASSWORD)'
+      # When it was set to true the task threw this error:
+      # zipalign: error while loading shared libraries: libz.so.1: cannot open shared object file: No such file or directory
+      zipalign: false
+
+  - task: CopyFiles@2
+    inputs:
+      contents: '**/*.apk'
+      targetFolder: '$(build.artifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
     
 - task: PublishBuildArtifacts@1
   inputs:
